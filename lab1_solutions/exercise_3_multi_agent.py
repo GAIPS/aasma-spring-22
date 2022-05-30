@@ -7,8 +7,8 @@ from aasma import Agent
 from aasma.utils import compare_results
 from aasma.simplified_predator_prey import SimplifiedPredatorPrey
 
-from exercise_1_single_random_agent import RandomAgent
-from exercise_2_single_random_vs_greedy import GreedyAgent
+from lab1_solutions.exercise_1_single_random_agent import RandomAgent
+from lab1_solutions.exercise_2_single_random_vs_greedy import GreedyAgent
 
 
 def run_multi_agent(environment: Env, agents: Sequence[Agent], n_episodes: int) -> np.ndarray:
@@ -16,6 +16,8 @@ def run_multi_agent(environment: Env, agents: Sequence[Agent], n_episodes: int) 
     results = np.zeros(n_episodes)
 
     for episode in range(n_episodes):
+        if episode % 10 == 0:
+            print(f"Episode {episode} out of {n_episodes} completed.")
 
         steps = 0
         terminals = [False for _ in range(len(agents))]
@@ -24,8 +26,11 @@ def run_multi_agent(environment: Env, agents: Sequence[Agent], n_episodes: int) 
         while not all(terminals):
             steps += 1
             # TODO - Main Loop (4-6 lines of code)
-            raise NotImplementedError()
-
+            for observations, agent in zip(observations, agents):
+                agent.see(observations)
+            actions = [agent.action() for agent in agents]
+            next_observations, rewards, terminals, info = environment.step(actions)
+            observations = next_observations
         results[episode] = steps
 
         environment.close()

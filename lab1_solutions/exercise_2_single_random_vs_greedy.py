@@ -9,7 +9,7 @@ from aasma.utils import compare_results
 from aasma.wrappers import SingleAgentWrapper
 from aasma.simplified_predator_prey import SimplifiedPredatorPrey
 
-from exercise_1_single_random_agent import run_single_agent, RandomAgent
+from lab1_solutions.exercise_1_single_random_agent import run_single_agent, RandomAgent
 
 N_ACTIONS = 5
 DOWN, LEFT, UP, RIGHT, STAY = range(N_ACTIONS)
@@ -34,7 +34,11 @@ class GreedyAgent(Agent):
         #  You may use the two auxiliary methods down below
         #  Warning: Your code should work for an arbitrary number of preys
         #  (even though the examples considers a single one)
-        raise NotImplementedError()
+        prey_positions = self.observation[self.n_agents * 2:]
+        agent_position = agents_positions[self.agent_id * 2], agents_positions[(self.agent_id * 2) + 1]
+        closest_prey = self.closest_prey(agent_position, prey_positions)
+        prey_found = closest_prey is not None
+        return self.direction_to_go(agent_position, closest_prey) if prey_found else random.randrange(N_ACTIONS)
 
     # ################# #
     # Auxiliary Methods #
@@ -58,8 +62,7 @@ class GreedyAgent(Agent):
     def closest_prey(self, agent_position, prey_positions):
         """
         Given the positions of an agent and a sequence of positions of all prey,
-        returns the positions of the closest prey.
-        If there are no preys, None is returned instead
+        returns the positions of the closest prey
         """
         min = math.inf
         closest_prey_position = None

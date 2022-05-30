@@ -115,12 +115,14 @@ class SimplifiedPredatorPrey(gym.Env):
         for prey_i in range(self.n_preys):
             if self._prey_alive[prey_i]:
                 predator_neighbour_count, n_i = self._neighbour_agents(self.prey_pos[prey_i])
+                #n_prey_legal_pos = len(self.__get_neighbour_coordinates(self.prey_pos[prey_i]))
+                #min_captors = self._required_captors if n_prey_legal_pos >= self._required_captors else n_prey_legal_pos
+                min_captors = self._required_captors
 
-                if predator_neighbour_count >= self._required_captors:
+                if predator_neighbour_count >= min_captors:
 
-                    _reward = self._penalty if predator_neighbour_count < self._required_captors else self._prey_capture_reward
-
-                    self._prey_alive[prey_i] = (predator_neighbour_count < self._required_captors)
+                    _reward = self._prey_capture_reward
+                    self._prey_alive[prey_i] = False
 
                     for agent_i in range(self.n_agents):
                         rewards[agent_i] += _reward
