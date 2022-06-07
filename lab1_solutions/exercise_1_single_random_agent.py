@@ -20,7 +20,6 @@ def run_single_agent(environment: Env, agent: Agent, n_episodes: int) -> np.ndar
         observation = environment.reset()
         while not terminal:
             steps += 1
-            # TODO - Main Loop (4 lines of code)
             agent.see(observation)
             action = agent.action()
             next_obs, reward, terminal, info = environment.step(action)
@@ -42,6 +41,9 @@ class RandomAgent(Agent):
     def action(self) -> int:
         return np.random.randint(self.n_actions)
 
+    def next(self, observation, action, next_observation, reward, terminal, info):
+        # Not a learning agent
+        pass
 
 if __name__ == '__main__':
 

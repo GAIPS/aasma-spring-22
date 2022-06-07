@@ -27,6 +27,11 @@ class Agent(ABC):
         Returns an action, represented by an integer
         May take into account the observation (numpy.ndarray).
 
+    next(next_observation, reward, terminal, info): dict
+        Abstract method
+        Allows the agent to learn from experience.
+        Returns additional info
+
     References
     ----------
     ..[1] Michael Wooldridge "An Introduction to MultiAgent Systems - Second
@@ -38,6 +43,7 @@ class Agent(ABC):
     def __init__(self, name: str):
         self.name = name
         self.observation = None
+        self.training = True
 
     def see(self, observation: np.ndarray):
         self.observation = observation
@@ -45,3 +51,13 @@ class Agent(ABC):
     @abstractmethod
     def action(self) -> int:
         raise NotImplementedError()
+
+    @abstractmethod
+    def next(self, observation, action, next_observation, reward, terminal, info):
+        raise NotImplementedError()
+
+    def train(self):
+        self.training = True
+
+    def eval(self):
+        self.training = False

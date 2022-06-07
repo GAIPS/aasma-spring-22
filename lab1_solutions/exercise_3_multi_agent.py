@@ -16,8 +16,6 @@ def run_multi_agent(environment: Env, agents: Sequence[Agent], n_episodes: int) 
     results = np.zeros(n_episodes)
 
     for episode in range(n_episodes):
-        if episode % 10 == 0:
-            print(f"Episode {episode} out of {n_episodes} completed.")
 
         steps = 0
         terminals = [False for _ in range(len(agents))]
@@ -25,7 +23,6 @@ def run_multi_agent(environment: Env, agents: Sequence[Agent], n_episodes: int) 
 
         while not all(terminals):
             steps += 1
-            # TODO - Main Loop (4-6 lines of code)
             for observations, agent in zip(observations, agents):
                 agent.see(observations)
             actions = [agent.action() for agent in agents]
